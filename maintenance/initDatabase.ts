@@ -7,7 +7,7 @@ async function loadImages() {
     await dbConnection.query("TRUNCATE TABLE image")
     for (const image of IMAGES) {
         const imgUuid = image.split('/').slice(-1)
-        await dbConnection.query(`INSERT INTO image (users_id, uploaded_at, description, filename) VALUES (5, 1733419749, 'Test Description', '${imgUuid}')`)
+        await dbConnection.query(`INSERT INTO image (users_id, uploaded_at, description, filename, type) VALUES (5, 1733419749, 'Test Description', '${imgUuid}', 0)`)
     }
 }
 

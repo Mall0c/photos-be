@@ -31,11 +31,14 @@ export class Images {
         }
     }
 
-    public async getAllImageIDs(req: Request, res: Response) {
+    public async getAllImageIDs(req: Request, res: Response, ownerPictures: boolean) {
         const images = (await Models.Image.findAll(
             {
                 attributes: ['id'],
-                order: [['id', 'ASC']]
+                order: [['id', 'ASC']],
+                where: {
+                    type: ownerPictures === true ? 0 : 1
+                }
             })).map(elem => elem.dataValues.id)
 
         res.status(200)

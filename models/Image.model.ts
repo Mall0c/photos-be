@@ -7,6 +7,7 @@ interface ImageAttributes {
     uploaded_at: number;
     description: string;
     filename: string;
+    type: number;
 }
 
 export class Image extends Model<ImageAttributes> implements ImageAttributes {
@@ -15,6 +16,7 @@ export class Image extends Model<ImageAttributes> implements ImageAttributes {
     uploaded_at: number;
     description: string;
     filename: string;
+    type: number;
 }
 
 Image.init(
@@ -40,6 +42,10 @@ Image.init(
             type: DataTypes.STRING(1000),
             allowNull: false
         },
+        type: {
+            type: DataTypes.SMALLINT,
+            allowNull: false
+        }
     },
     {
         sequelize: Database.getInstance(),

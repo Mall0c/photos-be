@@ -9,7 +9,10 @@ router
         return await new Images().getImageData(req, res)
     })
     .get('/images', async (req: Request, res: Response) => {
-        return await new Images().getAllImageIDs(req, res)
+        return await new Images().getAllImageIDs(req, res, true)
+    })
+    .get('/images-by-guests', async (req: Request, res: Response) => {
+        return await new Images().getAllImageIDs(req, res, false)
     })
     .get('/images/:id', async (req: Request, res: Response) => {
         return await new Images().getImage(req, res, false)
