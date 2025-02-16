@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import Models from '../../models/index'
 import path from 'node:path'
 import fs from 'node:fs'
+import sharp from 'sharp'
 import { isAdmin, isOwner } from '../../common/Middleware'
 
 export class Images {
@@ -166,5 +167,19 @@ export class Images {
                 uploader: null
             })
         }
+    }
+
+    public async uploadImage(req: Request, res: Response) {
+        console.log("Received image")
+        const scaled = await sharp(req.file.path)
+            .metadata()
+            .then(metadata => 
+                sharp(req.file.path)
+                    .resize(metadata.width * 0.2)
+                    .toBuffer()
+            )
+        
+        fs.writeFileSync(`assets/img-scaled/${req.file.filename}`, scaled)
+        return res.status(201)
     }
 }
