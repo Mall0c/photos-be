@@ -5,6 +5,11 @@ import fs from 'node:fs'
 import sharp from 'sharp'
 import { isAdmin, isOwner } from '../../common/Middleware'
 
+enum ImageType {
+    ADMIN,
+    GUEST
+}
+
 export class Images {
     constructor() {}
 
@@ -38,7 +43,7 @@ export class Images {
                 attributes: ['id'],
                 order: [['id', 'ASC']],
                 where: {
-                    type: ownerPictures === true ? 0 : 1
+                    type: ownerPictures === true ? ImageType.ADMIN : ImageType.GUEST
                 }
             })).map(elem => elem.dataValues.id)
 
@@ -170,7 +175,6 @@ export class Images {
     }
 
     public async uploadImage(req: Request, res: Response) {
-        console.log("Received image")
         const scaled = await sharp(req.file.path)
             .metadata()
             .then(metadata => 
@@ -180,6 +184,23 @@ export class Images {
             )
         
         fs.writeFileSync(`assets/img-scaled/${req.file.filename}`, scaled)
+
+        let isGuest = false
+        if (isAdmin(req.userData) === false && isOwner(req.userData) === false) {
+            isGuest = true
+            // Its a guest, but he wants to upload to the admin/owner gallery.
+            if (req.body.type === ImageType.ADMIN) {
+                return res.send(403)
+            }
+        }
+        
+        await Models.Image.create({
+            users_id: req.userData.id,
+            uploaded_at: Math.floor(new Date().valueOf() / 1000),
+            description: req.body.description,
+            filename: req.file.filename,
+            type: req.body.type
+        })
         return res.status(201)
     }
 }

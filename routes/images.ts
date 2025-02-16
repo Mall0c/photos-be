@@ -15,11 +15,10 @@ function isValidImage(file: Express.Multer.File): string | null {
 } 
 
 const storage = multer.diskStorage({
-    destination: path.resolve(__dirname, `../assets/img`),
-    filename: (req, file) => {
+    destination: (req, file, cb) => cb(null, path.resolve(__dirname, `../assets/img`)),
+    filename: (req, file, cb) => {
         const fileExtension = isValidImage(file)
-        return "foobar" + "." + fileExtension
-        //return uid(32) + "." + fileExtension
+        cb(null, uid(32) + "." + fileExtension)
     }
 })
 
@@ -34,8 +33,6 @@ const imageUpload = multer({
     },
     limits: {
         files: 1,
-        fields: 1,
-        parts: 1,
         fileSize: 10 * 1024 * 1024 // 10 MiB
     }
 })
