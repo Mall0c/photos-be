@@ -201,6 +201,7 @@ export class Images {
             filename: req.file.filename,
             type: req.body.type
         })
-        return res.status(201)
+
+        return res.status(201).send()
     }
 }
