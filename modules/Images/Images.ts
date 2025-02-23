@@ -5,7 +5,7 @@ import fs from 'node:fs'
 import sharp from 'sharp'
 import { isAdmin, isOwner } from '../../common/Middleware'
 
-enum ImageType {
+export enum ImageType {
     ADMIN,
     GUEST
 }
