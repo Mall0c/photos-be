@@ -2,8 +2,8 @@ import { Request, Response } from 'express'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import Models from '../../models/index'
-import { PolicyEnforcer } from '../../common/PolicyEnforcer'
 import { isOwner, isAdmin } from '../../common/Middleware'
+import { User } from 'models/User.model'
 
 export enum Roles {
     Owner = 0,
@@ -171,5 +171,16 @@ export class Users {
 
         res.status(200)
         return res.send({})
+    }
+
+    public async getUserById(id: number): Promise<User> {
+        const user = await Models.User.findOne({
+            attributes: ['id', 'email', 'name', 'role'],
+            where: {
+                id: id
+            }
+        })
+
+        return user
     }
 }
