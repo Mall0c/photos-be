@@ -1,16 +1,12 @@
 import { Model, DataTypes } from 'sequelize'
 import { Database } from '../common/Database'
 
-interface CommentAttributes {
+export interface CommentAttributes {
     id: number;
     users_id: number;
     image_id: number;
     commented_at: number;
     comment: string;
-}
-
-export interface CommentExtended extends CommentAttributes {
-    author?: string
 }
 
 export class Comment extends Model<CommentAttributes> implements CommentAttributes {

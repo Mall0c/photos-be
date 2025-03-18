@@ -1,7 +1,7 @@
 import { Model, DataTypes } from 'sequelize'
 import { Database } from '../common/Database'
 
-interface ImageAttributes {
+export interface ImageAttributes {
     id: number;
     users_id: number;
     uploaded_at: number;

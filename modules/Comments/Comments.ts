@@ -1,8 +1,11 @@
 import { Request, Response } from 'express'
 import Models from '../../models/index'
 import { isAdmin, isOwner } from '../../common/Middleware'
-import { Comment, CommentExtended } from 'models/Comment.model'
+import { Comment, CommentAttributes } from 'models/Comment.model'
 
+interface CommentExtended extends CommentAttributes {
+    author?: string
+}
 export class Comments {
     constructor() {}
 

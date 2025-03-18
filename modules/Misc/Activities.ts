@@ -2,7 +2,10 @@ import type { Request, Response } from "express";
 import Models from '../../models/index'
 import { ImageType } from "../Images/Images";
 import { Users } from "../Users/Users";
+import { CommentAttributes } from "models/Comment.model";
+import { ImageAttributes } from "models/Image.model";
 
+type CommentWithImageType = CommentAttributes & Pick<ImageAttributes, "type">
 export class Activities {
     constructor() {}
 
@@ -33,14 +36,32 @@ export class Activities {
             
             return res.status(200).send(imagesUsersMapedToNames)
         } else if (type === "comments") {
+            // TODO Improve. This must be cached to avoid unnecessary database calls.
             const comments = (await Models.Comment.findAll(
                 {
-                    attributes: ['id', 'commented_at', 'comment', 'users_id'],
+                    attributes: ['id', 'commented_at', 'comment', 'users_id', 'image_id'],
                     order: [['id', 'DESC']],
                     limit: 10
-                })).map(e => e.dataValues)
+                })).map(e => {
+                    const val = e.dataValues as CommentWithImageType
+                    val.type = -1
+                    return val
+                })
             
-                return res.status(200).send(comments)
+            // Get information if image is from owner or guest.
+            // TODO Improve. This must be cached to avoid unnecessary database calls.
+            for (const comment of comments) {
+                const image = await Models.Image.findOne(
+                    {
+                        where: {
+                            id: comment.image_id
+                        }
+                    }
+                )
+                comment.type = image.dataValues.type 
+            }
+
+            return res.status(200).send(comments)
         } else {
             res.status(400).send()
         }

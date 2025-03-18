@@ -41,12 +41,12 @@ export class Images {
         const images = (await Models.Image.findAll(
             {
                 attributes: ['id'],
-                order: [['id', 'ASC']],
+                order: ownerPictures === true ? [['id', 'ASC']] : [['id', 'DESC']],
                 where: {
                     type: ownerPictures === true ? ImageType.ADMIN : ImageType.GUEST
                 }
             })).map(elem => elem.dataValues.id)
-
+            
         res.status(200)
         return res.json(images)
     }
