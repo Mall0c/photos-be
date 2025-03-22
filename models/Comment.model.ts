@@ -9,12 +9,8 @@ export interface CommentAttributes {
     comment: string;
 }
 
-export class Comment extends Model<CommentAttributes> implements CommentAttributes {
-    id: number;
-    users_id: number;
-    image_id: number;
-    commented_at: number;
-    comment: string;
+export class Comment extends Model<CommentAttributes> {
+
 }
 
 Comment.init(

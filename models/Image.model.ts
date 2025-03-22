@@ -10,13 +10,8 @@ export interface ImageAttributes {
     type: number;
 }
 
-export class Image extends Model<ImageAttributes> implements ImageAttributes {
-    id: number;
-    users_id: number;
-    uploaded_at: number;
-    description: string;
-    filename: string;
-    type: number;
+export class Image extends Model<ImageAttributes> {
+
 }
 
 Image.init(

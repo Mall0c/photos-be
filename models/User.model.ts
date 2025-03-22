@@ -9,12 +9,8 @@ interface UserAttributes {
     role: number;
 }
 
-export class User extends Model<UserAttributes> implements UserAttributes {
-    id: number;
-    email: string;
-    name: string;
-    password: string;
-    role: number;
+export class User extends Model<UserAttributes> {
+
 }
 
 User.init(
