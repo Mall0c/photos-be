@@ -29,3 +29,7 @@ export function isOwner(userData: jwtData) {
 export function isAdmin(userData: jwtData) {
     return userData.role === 1
 }
+
+export function isAdminOrOwner(userData: jwtData) {
+    return isOwner(userData) || isAdmin(userData)
+}

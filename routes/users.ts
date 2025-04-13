@@ -14,7 +14,7 @@ router
     .get('/users/:offset', loggedIn, async (req: Request, res: Response) => {
         return await new Users().getUsers(req, res)
     })
-    .post('/admin/user/:userId', loggedIn, async (req: Request, res: Response) => {
+    .post('/user/edit/:userId', loggedIn, async (req: Request, res: Response) => {
         return await new Users().editUser(req, res)
     })
     .delete('/admin/user/:userId', loggedIn, async (req: Request, res: Response) => {

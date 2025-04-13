@@ -47,8 +47,7 @@ export class Images {
                 }
             })).map(elem => elem.dataValues.id)
             
-        res.status(200)
-        return res.json(images)
+        return res.status(200).json(images)
     }
 
     public async getImageData(req: Request, res: Response) {

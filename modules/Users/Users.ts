@@ -2,7 +2,7 @@ import { Request, Response } from 'express'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import Models from '../../models/index'
-import { isOwner, isAdmin } from '../../common/Middleware'
+import { isAdminOrOwner } from '../../common/Middleware'
 import { User } from 'models/User.model'
 
 export enum Roles {
@@ -84,7 +84,6 @@ export class Users {
 
         const passwordCheck = await bcrypt.compare(password, user.dataValues.password)
         if (!passwordCheck) {
-            console.log("Hier 2")
             return res.status(401).json({ 
                 errorcode: 1,
                 text: 'Authentication failed 1' 
@@ -123,23 +122,46 @@ export class Users {
 
     public async editUser(req: Request, res: Response) {
         const id = parseInt(req.params.userId)
-        const name = req.body.name
+        const name = req.body.userName
         const role = req.body.role
+        const email = req.body.email
+        const currentPassword = req.body.currentPassword
+        const newPassword = req.body.newPassword
 
-        // Check if the request comes from the user itself.
-        if (id !== req.userData.id) {
-            // Check if the request comes from admin.
-            if (isAdmin(req.userData) === false && isOwner(req.userData) === false) {
+        // If the requests contains a new role for the user, or the userId is not the same is in the jwt token,
+        // check if the requests comes from an admin.
+        if (role || id !== req.userData.id) {
+            if (isAdminOrOwner(req.userData) === false) {
                 res.status(401)
                 return res.send({})
             }
         }
+
+        if (currentPassword && newPassword) {
+            const user = await Models.User.findOne({
+                attributes: ['password'],
+                where: {
+                    id: id
+                }
+            })
+
+            const passwordCheck = await bcrypt.compare(currentPassword, user.dataValues.password)
+            if (!passwordCheck) {
+                return res.status(401).json({ 
+                    errorcode: 1,
+                    text: 'Authentication failed' 
+                })
+            }
+        }
         
+        const dataToSave = Object.create(null)
+        if (name) dataToSave.name = name
+        if (role) dataToSave.role = role
+        if (email) dataToSave.email = email
+        if (currentPassword && newPassword) dataToSave.password = bcrypt.hashSync(newPassword, 10)
+
         await Models.User.update(
-            {
-                name: name,
-                role: role
-            },
+            dataToSave,
             {
                 where: {
                     id: id
@@ -157,7 +179,7 @@ export class Users {
         // Check if the request comes from the user itself.
         if (id !== req.userData.id) {
             // Check if the request comes from admin.
-            if (isAdmin(req.userData) === false && isOwner(req.userData) === false) {
+            if (isAdminOrOwner(req.userData)) {
                 res.status(401)
                 return res.send({})
             }
