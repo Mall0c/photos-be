@@ -1,11 +1,7 @@
 import { Request, Response } from 'express'
 import Models from '../../models/index'
 import { isAdmin, isOwner } from '../../common/Middleware'
-import { Comment, CommentAttributes } from 'models/Comment.model'
-
-interface CommentExtended extends CommentAttributes {
-    author?: string
-}
+import type { CommentAttributes } from 'models/Comment.model'
 export class Comments {
     constructor() {}
 
@@ -40,7 +36,7 @@ export class Comments {
                 }
             })
 
-            const clone: CommentExtended = structuredClone(comment.dataValues)
+            const clone: CommentAttributes = structuredClone(comment.dataValues)
             clone.author = user.dataValues.name
             commentsResult.push(clone)
         }

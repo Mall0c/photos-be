@@ -1,0 +1,9 @@
+*.ts
+assets/
+maintenance/
+node_modules/
+.env
+.gitignore
+Dockerfile
+README.md
+tsconfig.json

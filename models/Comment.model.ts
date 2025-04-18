@@ -7,6 +7,7 @@ export interface CommentAttributes {
     image_id: number;
     commented_at: number;
     comment: string;
+    author?: string;
 }
 
 export class Comment extends Model<CommentAttributes> {
