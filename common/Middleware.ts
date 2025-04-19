@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken'
 import { jwtData } from 'index';
 
 export function loggedIn(req: Request, res: Response, next: NextFunction) {
-    const authHeader = req.headers['authorization'];
+    const authHeader = req.headers['x-auth-token'] as string;
     const token = authHeader && authHeader.split(' ')[1];
     
     if (!token) {

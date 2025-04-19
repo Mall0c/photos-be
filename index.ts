@@ -31,7 +31,7 @@ declare global {
     }))
     
     app.use(express.json())
-    app.use(router)
+    app.use('/api', router)
     
     // Start HTTP server.
     app.listen(HTTP_PORT, () => {
