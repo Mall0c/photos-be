@@ -1,0 +1,36 @@
+name: Deploy to VPS
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v4
+
+    - name: Setup SSH
+      uses: webfactory/ssh-agent@v0.9.0
+      with:
+        ssh-private-key: ${{ secrets.VPS_SSH_KEY }}
+
+    - name: Copy files to VPS
+      run: |
+        rsync -avz --exclude node_modules --exclude .git \
+        -e "ssh -o StrictHostKeyChecking=no" ./ \
+        ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/opt/webapp
+
+    - name: SSH and Deploy
+      run: |
+        ssh -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
+          cd ~/my-app
+          docker-compose down
+          docker-compose build --no-cache
+          docker-compose up -d
+        EOF
