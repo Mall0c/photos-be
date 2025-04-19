@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Log in to GHCR
-        run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
+      run: docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
     - name: Use Node.js 22.x
       uses: actions/setup-node@v4
       with:
