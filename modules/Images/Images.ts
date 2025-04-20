@@ -34,9 +34,9 @@ export class Images {
             res.status(200)
             console.log(`${process.env.ASSETS_PATH}/assets/img/${image.dataValues.filename}`)
             if (scaled) {
-                return res.sendFile(path.resolve(`${process.env.ASSETS_PATH}/assets/img-scaled/${image.dataValues.filename}`))
+                return res.sendFile(path.resolve(`/usr/src/app/assets/img-scaled/${image.dataValues.filename}`))
             } else {
-                return res.sendFile(path.resolve(`${process.env.ASSETS_PATH}/assets/img/${image.dataValues.filename}`))
+                return res.sendFile(path.resolve(`/usr/src/app/assets/img/${image.dataValues.filename}`))
             }
         } else {
             res.status(404)
