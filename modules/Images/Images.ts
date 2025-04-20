@@ -32,6 +32,7 @@ export class Images {
 
         if (image !== null) {
             res.status(200)
+            console.log(`${process.env.ASSETS_PATH}/assets/img/${image.dataValues.filename}`)
             if (scaled) {
                 return res.sendFile(path.resolve(`${process.env.ASSETS_PATH}/assets/img-scaled/${image.dataValues.filename}`))
             } else {
