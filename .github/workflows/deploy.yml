@@ -27,5 +27,4 @@ jobs:
           echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ secrets.GHCR_USERNAME }} --password-stdin
           docker image pull ghcr.io/${{ secrets.GHCR_USERNAME }}/photos-be:latest
           docker compose down
-          docker compose up -d
         EOF

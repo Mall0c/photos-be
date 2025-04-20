@@ -16,11 +16,17 @@ export class Images {
     public async getImage(req: Request, res: Response, scaled: boolean) {
         // TODO Validate, but not with ajv.
         
-        const imgId = req.params.id
+        const imgId = parseInt(req.params.id)
+
+        if (Number.isNaN(imgId)) {
+            res.status(404)
+            return res.send(null)
+        }
+
         const image = await Models.Image.findOne({
             attributes: ['filename'],
             where: {
-                id: parseInt(imgId)
+                id: imgId
             }
         })
 
@@ -53,11 +59,17 @@ export class Images {
     public async getImageData(req: Request, res: Response) {
         // TODO Validate, but not with ajv.
         
-        const imgId = req.params.id
+        const imgId = parseInt(req.params.id)
+
+        if (Number.isNaN(imgId)) {
+            res.status(404)
+            return res.send(null)
+        }
+
         const image = await Models.Image.findOne({
             attributes: ['id', 'users_id', 'uploaded_at', 'description'],
             where: {
-                id: parseInt(imgId)
+                id: imgId
             }
         })
 
@@ -178,7 +190,7 @@ export class Images {
             .metadata()
             .then(metadata => 
                 sharp(req.file.path)
-                    .resize(metadata.width * 0.2)
+                    .resize(Math.ceil(metadata.width * 0.2))
                     .toBuffer()
             )
         

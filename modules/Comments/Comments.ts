@@ -8,7 +8,13 @@ export class Comments {
     public async getComments(req: Request, res: Response) {
         // TODO Validate, but not with ajv.
 
-        const imgId = req.params.img
+        const imgId = parseInt(req.params.img)
+
+        if (Number.isNaN(imgId)) {
+            res.status(404)
+            return res.send(null)
+        }
+
         const page = parseInt(req.params.page)
 
         const comments = await Models.Comment.findAll({
