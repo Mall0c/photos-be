@@ -26,7 +26,7 @@ declare global {
     
     const app = express()
     app.use(cors({
-        origin: ["http://localhost", "http://localhost:5173", "http://localhost:4173"],
+        origin: ["http://localhost", "http://localhost:5173", "http://localhost:4173", "https://www.richardsteinbrecht.de", "https://richardsteinbrecht.de"],
         optionsSuccessStatus: 200
     }))
     
