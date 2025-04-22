@@ -17,6 +17,13 @@ export class Users {
     public async register(req: Request, res: Response) {
         const email = req.body.email
         const name = req.body.name
+        const registerToken = req.body.name
+
+        if (registerToken !== process.env.REGISTRATION_TOKEN) {
+            return res.status(401).json({
+                text: "Ungültiger Registrierungstoken."
+            })
+        }
 
         // TODO Validate, but not with ajv.
 
@@ -30,8 +37,7 @@ export class Users {
         if (user) {
             res.status(400)
             return res.json({
-                errorcode: 5,
-                text: "Name is already in use."
+                text: "E-Mail ist bereits in Benutzung."
             })
         }
 
@@ -75,18 +81,15 @@ export class Users {
         })
         
         if (user === undefined) {
-            console.log("Hier 1")
-            return res.status(401).json({ 
-                errorcode: 1,
-                text: 'Authentication failed 1' 
+            return res.status(401).json({
+                text: 'Anmeldung fehlgeschlagen.' 
             })
         }
 
         const passwordCheck = await bcrypt.compare(password, user.dataValues.password)
         if (!passwordCheck) {
-            return res.status(401).json({ 
-                errorcode: 1,
-                text: 'Authentication failed 1' 
+            return res.status(401).json({
+                text: 'Anmeldung fehlgeschlagen.' 
             })
         }
 
@@ -147,9 +150,8 @@ export class Users {
 
             const passwordCheck = await bcrypt.compare(currentPassword, user.dataValues.password)
             if (!passwordCheck) {
-                return res.status(401).json({ 
-                    errorcode: 1,
-                    text: 'Authentication failed' 
+                return res.status(401).json({
+                    text: 'Anmeldung fehlgeschlagen.' 
                 })
             }
         }

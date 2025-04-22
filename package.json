@@ -16,7 +16,6 @@
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "glob": "^11.0.0",
-    "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
     "pg": "^8.13.1",
@@ -24,7 +23,8 @@
     "sequelize-typescript": "^2.1.6",
     "sharp": "^0.33.5",
     "sqlite3": "^5.1.7",
-    "uid": "^2.0.2"
+    "uid": "^2.0.2",
+    "yup": "^1.6.1"
   },
   "name": "backend",
   "version": "1.0.0",

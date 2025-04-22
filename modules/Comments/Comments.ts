@@ -26,8 +26,7 @@ export class Comments {
         })
         
         if (comments === null) {
-            return res.status(401).json({ 
-                errorcode: 1,
+            return res.status(401).json({
                 text: 'Failed' 
             })
         }
@@ -58,24 +57,21 @@ export class Comments {
         if (typeof comment !== "string") {
             res.status(400)
             return res.json({
-                errorcode: 1,
-                text: "Comment is invalid."
+                text: "Kommentar ist ungültig."
             })
         }
         
         if (comment.length === 0) {
             res.status(400)
             return res.json({
-                errorcode: 2,
-                text: "Comment is empty."
+                text: "Kommentar ist leer."
             })
         }
     
         if (comment.length > 200) {
             res.status(400)
             return res.json({
-                errorcode: 3,
-                text: "Comment is too long."
+                text: "Kommentar ist zu lang."
             })
         }
         
