@@ -4,6 +4,7 @@ dotenv.config()
 import express from 'express'
 import cors from 'cors'
 import jwt from 'jsonwebtoken'
+import morgan from 'morgan'
 import { router } from './routes'
 import { Database } from './common/Database'
 
@@ -25,6 +26,8 @@ declare global {
     Database.getInstance()
     
     const app = express()
+
+    app.use(morgan('combined'))
     app.use(cors({
         origin: ["http://localhost", "http://localhost:5173", "http://localhost:4173", "https://www.richardsteinbrecht.de", "https://richardsteinbrecht.de"],
         optionsSuccessStatus: 200
